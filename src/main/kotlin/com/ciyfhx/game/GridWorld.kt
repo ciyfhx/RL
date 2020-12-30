@@ -10,7 +10,10 @@ class GridWorld(
     }
 
     enum class Action {
-        North, South, East, West
+        North, South, East, West;
+        companion object {
+            fun intToCell(value: Int) = Action.values()[value]
+        }
     }
 
     data class Result(val reward: Int,
@@ -35,7 +38,7 @@ class GridWorld(
 
         // First cell will be the terminal state
         cells[0][0] = Cell.Terminal
-        cells[sizeOfWorld - 1][sizeOfWorld - 1] = Cell.Terminal
+//        cells[sizeOfWorld - 1][sizeOfWorld - 1] = Cell.Terminal
 
     }
 
@@ -54,7 +57,7 @@ class GridWorld(
         return Result(currentState.reward, nextState, currentState.transitionProbability)
     }
 
-    private fun nextState(x: Int, y: Int, action: Action): Point {
+    fun nextState(x: Int, y: Int, action: Action): Point {
         return when (action) {
             Action.North -> {
                 // Check for out of bound

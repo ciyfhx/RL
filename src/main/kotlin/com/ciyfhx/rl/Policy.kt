@@ -1,6 +1,7 @@
 package com.ciyfhx.rl
 
 import com.ciyfhx.math.getColumnData
+import com.ciyfhx.math.setColumnData
 import com.ciyfhx.math.zerosf
 import org.ejml.data.FMatrixRMaj
 
@@ -24,5 +25,9 @@ class Policy(
     }
 
     operator fun get(stateIndex: Int) = stateActionsDistribution.getColumnData(stateIndex)
+
+    operator fun set(stateIndex: Int, updatedActions: FloatArray){
+        stateActionsDistribution.setColumnData(stateIndex, updatedActions)
+    }
 
 }
