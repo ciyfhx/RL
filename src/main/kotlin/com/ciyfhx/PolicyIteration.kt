@@ -1,6 +1,7 @@
 package com.ciyfhx
 
 import com.ciyfhx.game.GridWorld
+import com.ciyfhx.game.by
 import com.ciyfhx.math.sumByFloat
 import com.ciyfhx.math.zerosf
 import com.ciyfhx.rl.Policy
@@ -8,7 +9,18 @@ import org.ejml.data.FMatrixRMaj
 
 class PolicyIteration {
 
-    fun policyEval(environment: GridWorld, policy: Policy, discountFactor: Float) {
+
+    fun policyIteration(sizeOfWorld: Int = 5) {
+
+        val environment = GridWorld()
+        var policy = Policy(sizeOfWorld, 4)
+        val V = policyEvaluation(environment, policy, 1f)
+
+
+
+    }
+
+    fun policyEvaluation(environment: GridWorld, policy: Policy, discountFactor: Float): FMatrixRMaj {
         val sizeOfStates = environment.sizeOfWorld * environment.sizeOfWorld
 
         val V = FMatrixRMaj(environment.sizeOfWorld, environment.sizeOfWorld, true, *zerosf(sizeOfStates))
@@ -24,14 +36,11 @@ class PolicyIteration {
                 var newVValue = 0f
 
                 val actionsProb = policy[stateIndex]
-                val validStates = environment.nextPossibleStates(x, y)
-                val reward = environment.reward(x, y).toFloat()
-                newVValue = actionsProb[0] * (validStates.sumByFloat { reward + discountFactor * V[it.x, it.y] })
 
-//                for ((actionIndex, action) in GridWorld.Action.values().withIndex()) {
-//                    val reward = environment.reward(x, y, action).toFloat()
-//                    newVValue = actionsProb[actionIndex] * (validStates.sumByFloat { reward + discountFactor * V[it.x, it.y] })
-//                }
+                for ((actionIndex, action) in GridWorld.Action.values().withIndex()) {
+                    val (reward, nextState, transitionProbability) = environment.perform(x, y, action)
+                    newVValue += actionsProb[actionIndex] * transitionProbability * (reward + discountFactor * V[nextState.x, nextState.y])
+                }
 
                 newV[x, y] = newVValue
 
@@ -39,8 +48,7 @@ class PolicyIteration {
             V.set(newV)
             V.print()
         }
-
-
+        return V
     }
 }
 
@@ -53,7 +61,7 @@ fun main(){
 
     val policyIteration = PolicyIteration()
 
-    policyIteration.policyEval(gridWorld, randomPolicy, 1f)
+    policyIteration.policyEvaluation(gridWorld, randomPolicy, 1f)
 
 
 
