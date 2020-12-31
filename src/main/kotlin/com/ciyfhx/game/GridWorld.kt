@@ -12,7 +12,7 @@ class GridWorld(
     enum class Action {
         North, South, East, West;
         companion object {
-            fun intToCell(value: Int) = Action.values()[value]
+            fun intToCell(value: Int) = values()[value]
         }
     }
 

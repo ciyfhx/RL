@@ -84,15 +84,4 @@ fun main(){
     val policyIteration = PolicyIteration()
     policyIteration.policyIteration()
 
-//    val sizeOfWorld = 4
-//
-//    val gridWorld = GridWorld(sizeOfWorld)
-//    val randomPolicy = Policy(sizeOfWorld*sizeOfWorld, 4)
-//
-//    val policyIteration = PolicyIteration()
-//
-//    policyIteration.policyEvaluation(gridWorld, randomPolicy, 1f)
-//
-//
-
 }
